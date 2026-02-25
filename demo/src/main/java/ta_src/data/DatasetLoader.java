@@ -31,13 +31,13 @@ public class DatasetLoader {
                     Geometry geom = (Geometry) currFeature.getDefaultGeometry();
 
                     if (geom instanceof LineString) {
-                        // CoordinateProjector.reprojectToUTM((LineString) geom);
-                        polylines.add(new Polyline(Arrays.asList(geom.getCoordinates())));
+                        LineString projected = CoordinateProjector.reprojectToUTM((LineString) geom);
+                        polylines.add(new Polyline(Arrays.asList(projected.getCoordinates())));
                     } else if (geom instanceof MultiLineString) {
                         for (int i = 0;i < geom.getNumGeometries();++i) {
                             LineString ls = (LineString) geom.getGeometryN(i);
-                            // CoordinateProjector.reprojectToUTM((LineString) ls);
-                            polylines.add(new Polyline(Arrays.asList(ls.getCoordinates())));
+                            LineString projected = CoordinateProjector.reprojectToUTM((LineString) ls);
+                            polylines.add(new Polyline(Arrays.asList(projected.getCoordinates())));
                         }
                     }
                 }

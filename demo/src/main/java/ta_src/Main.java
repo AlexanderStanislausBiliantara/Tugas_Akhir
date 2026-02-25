@@ -19,8 +19,10 @@ import org.locationtech.jts.geom.Coordinate;
 
 public class Main {
     public static void main(String[] args) {
+        System.setProperty("org.geotools.referencing.forceXY", "true");
+
         String iptPath = "C:\\Users\\MyLaptop\\Documents\\Tugas Akhir\\dataset\\natural earth\\geojson\\rivers-natural-earth.geojson";
-        double tolerance = 150;
+        double tolerance = 150; 
 
         List<Polyline> polylines = DatasetLoader.loadData(iptPath);
         if (polylines.isEmpty()) {
@@ -28,7 +30,9 @@ public class Main {
             return;
         }
 
-        // Polyline original = polylines.get(5);
+        System.out.println(polylines.size());
+
+        Polyline original = polylines.get(25);
         List<Coordinate> coords = List.of(
             new Coordinate(96, 784),
             new Coordinate(384, 784),
@@ -59,6 +63,10 @@ public class Main {
 
         Polyline test = new Polyline(coords);
         System.out.printf("Num of points in original : %d\n", test.getCoordinates().size());
+        System.out.println(Exporter.toSimpleIpeString(test));
+        System.out.println();
+        System.out.println("=================");
+        System.out.println();
 
         SimplificationAlgorithm[] algorithms = {
             new DouglasPeucker(tolerance),
@@ -76,7 +84,7 @@ public class Main {
             Polyline simplified = algo.simplify(test);
             System.out.println(algo.getClass().getSimpleName());
             System.out.printf("Num of points in simplified : %d\n", simplified.getCoordinates().size());
-            System.out.println(Exporter.toIpeString(simplified));
+            System.out.println(Exporter.toSimpleIpeString(simplified));
             System.out.println();
         }
     }

@@ -49,7 +49,7 @@ public class LangSimplification implements SimplificationAlgorithm {
             boolean simplifiedSegment = false;
 
             while (j > i + 1) {
-                if (allPointWithinTolerance(coords, j, i)) {
+                if (allPointWithinTolerance(coords, i, j)) {
                     simplifiedCoords.add(coords.get(j));
                     i = j;
                     simplifiedSegment = true;
