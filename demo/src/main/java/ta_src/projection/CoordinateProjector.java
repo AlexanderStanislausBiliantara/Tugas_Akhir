@@ -37,4 +37,25 @@ public class CoordinateProjector {
 
         return target;
     }
+
+    public static LineString reprojectFromUTM(LineString utmLine) throws NoSuchAuthorityCodeException, FactoryException, TransformException, MismatchedDimensionException, org.geotools.api.referencing.operation.TransformException {
+        Coordinate startCoord = utmLine.getCoordinateN(0);
+        int utmZone = (int) Math.floor((startCoord.x + 180.0) / 6.0) + 1;
+        String hemisphere = "";
+
+        if (startCoord.y >= 0) {
+            hemisphere = "326";    
+        } else {
+            hemisphere = "327";
+        }
+
+        String targetEPSG = "EPSG:" + hemisphere + String.format("%02d", utmZone);
+
+        CoordinateReferenceSystem sourceCRS = CRS.decode(targetEPSG);
+        CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:4236");
+
+        MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
+
+        return (LineString) JTS.transform(utmLine, transform);
+    }
 }
